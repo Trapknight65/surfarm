@@ -71,10 +71,10 @@ export default function Header() {
                         ))}
                         <Link
                             href="/contact"
-                            className="block w-full text-center px-6 py-3 bg-crimson-red text-white rounded-full font-semibold hover:bg-electric-blue transition-all shadow-md mt-4"
+                            className="block w-full text-center px-6 py-3 bg-accent text-white rounded-full font-semibold hover:bg-electric-blue transition-all shadow-md mt-4"
                             onClick={() => setMobileMenuOpen(false)}
                         >
-                            Get Started
+                            Join Us
                         </Link>
                     </nav>
                 </div>
