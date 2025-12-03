@@ -1,3 +1,7 @@
+/**
+ * Author: Allan Deschamps
+ * Surf Farm - Home Page
+ */
 'use client';
 
 import Header from '@/components/Header';

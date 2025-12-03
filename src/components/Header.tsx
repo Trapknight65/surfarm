@@ -1,3 +1,7 @@
+/**
+ * Author: Allan Deschamps
+ * Surf Farm - Header Component
+ */
 'use client';
 
 import { motion } from 'framer-motion';

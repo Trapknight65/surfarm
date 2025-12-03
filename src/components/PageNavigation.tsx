@@ -1,3 +1,7 @@
+/**
+ * Author: Allan Deschamps
+ * Surf Farm - Page Navigation Component
+ */
 'use client';
 
 import Link from 'next/link';

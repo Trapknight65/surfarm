@@ -1,3 +1,7 @@
+/**
+ * Author: Allan Deschamps
+ * Surf Farm - Surf Dashboard Page
+ */
 'use client';
 
 import Header from '@/components/Header';
@@ -260,8 +264,8 @@ export default function SurfPage() {
                                     whileTap={{ scale: 0.98 }}
                                     disabled={!consent}
                                     className={`w-full py-3 rounded-xl font-semibold transition-colors shadow-lg ${consent
-                                            ? 'bg-cyan-600 text-white hover:bg-cyan-700'
-                                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        ? 'bg-cyan-600 text-white hover:bg-cyan-700'
+                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                         }`}
                                 >
                                     Confirm Booking

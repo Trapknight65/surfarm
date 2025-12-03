@@ -1,3 +1,7 @@
+/**
+ * Author: Allan Deschamps
+ * Surf Farm - Hero Slider Component
+ */
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
