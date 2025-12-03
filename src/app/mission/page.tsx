@@ -19,7 +19,7 @@ export default function MissionPage() {
 
                 <div className="flex flex-col lg:flex-row gap-8 items-start">
                     {/* Content */}
-                    <div className="flex-1 prose prose-lg prose-green max-w-none glass p-8 rounded-3xl">
+                    <div className="flex-1 glass p-8 rounded-3xl">
                         <p className="text-xl text-gray-700 leading-relaxed mb-6">
                             At Surf Farm, we believe in the symbiotic relationship between the land and the sea.
                             Located in the beautiful Costa da Caparica, Portugal, we are cultivating a community

@@ -3,7 +3,6 @@
 import Header from '@/components/Header';
 import HeroSlider from '@/components/HeroSlider';
 import MissionCards from '@/components/MissionCards';
-import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
@@ -11,7 +10,6 @@ export default function Home() {
       <Header />
       <HeroSlider />
       <MissionCards />
-      <Footer />
     </main>
   );
 }

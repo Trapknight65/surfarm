@@ -2,7 +2,7 @@
 
 import Header from '@/components/Header';
 import PageNavigation from '@/components/PageNavigation';
-import { Leaf, Waves, Heart } from 'lucide-react';
+import { Leaf, Waves, Heart, MessageCircle, Instagram } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
@@ -99,6 +99,7 @@ export default function JoinPage() {
     const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
     const [customAmount, setCustomAmount] = useState('');
     const [activeSection, setActiveSection] = useState('volunteer');
+    const [donationType, setDonationType] = useState<'money' | 'equipment'>('money');
 
     const handleAmountSelect = (amount: number) => {
         setSelectedAmount(amount);
@@ -195,53 +196,85 @@ export default function JoinPage() {
                                         <h3 className="text-2xl font-bold text-gray-900">Make a Donation</h3>
                                     </div>
 
-                                    <div className="grid grid-cols-3 gap-3 mb-4">
-                                        {donationAmounts.map((amount) => (
+                                    {/* Donation Type Toggle */}
+                                    <div className="flex p-1 bg-gray-200 rounded-xl mb-6">
+                                        <button
+                                            onClick={() => setDonationType('money')}
+                                            className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${donationType === 'money'
+                                                ? 'bg-white text-amber-800 shadow-sm'
+                                                : 'text-gray-600 hover:text-gray-800'
+                                                }`}
+                                        >
+                                            Money
+                                        </button>
+                                        <button
+                                            onClick={() => setDonationType('equipment')}
+                                            className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${donationType === 'equipment'
+                                                ? 'bg-white text-amber-800 shadow-sm'
+                                                : 'text-gray-600 hover:text-gray-800'
+                                                }`}
+                                        >
+                                            Equipment
+                                        </button>
+                                    </div>
+
+                                    {donationType === 'money' ? (
+                                        <motion.div
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <div className="grid grid-cols-3 gap-3 mb-4">
+                                                {donationAmounts.map((amount) => (
+                                                    <motion.button
+                                                        key={amount}
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                        onClick={() => handleAmountSelect(amount)}
+                                                        className={`p-4 rounded-xl font-bold transition-all ${selectedAmount === amount
+                                                            ? 'bg-amber-700 text-white shadow-lg'
+                                                            : 'bg-white/70 hover:bg-white text-gray-800'
+                                                            }`}
+                                                    >
+                                                        €{amount}
+                                                    </motion.button>
+                                                ))}
+                                            </div>
+
+                                            <div className="mb-4">
+                                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                                    Or enter custom amount
+                                                </label>
+                                                <div className="relative">
+                                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-bold">€</span>
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        value={customAmount}
+                                                        onChange={(e) => handleCustomAmount(e.target.value)}
+                                                        placeholder="0"
+                                                        className="w-full pl-8 pr-4 py-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800 font-semibold"
+                                                    />
+                                                </div>
+                                            </div>
+
                                             <motion.button
-                                                key={amount}
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                onClick={() => handleAmountSelect(amount)}
-                                                className={`p-4 rounded-xl font-bold transition-all ${selectedAmount === amount
-                                                    ? 'bg-amber-700 text-white shadow-lg'
-                                                    : 'bg-white/70 hover:bg-white text-gray-800'
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                                disabled={!selectedAmount && !customAmount}
+                                                className={`w-full py-3 rounded-xl font-bold transition-all ${selectedAmount || customAmount
+                                                    ? 'bg-amber-700 text-white hover:bg-amber-800 shadow-lg'
+                                                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                                     }`}
                                             >
-                                                €{amount}
+                                                {selectedAmount || customAmount
+                                                    ? `Donate €${selectedAmount || customAmount}`
+                                                    : 'Select an amount'}
                                             </motion.button>
-                                        ))}
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Or enter custom amount
-                                        </label>
-                                        <div className="relative">
-                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-bold">€</span>
-                                            <input
-                                                type="number"
-                                                min="1"
-                                                value={customAmount}
-                                                onChange={(e) => handleCustomAmount(e.target.value)}
-                                                placeholder="0"
-                                                className="w-full pl-8 pr-4 py-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800 font-semibold"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        disabled={!selectedAmount && !customAmount}
-                                        className={`w-full py-3 rounded-xl font-bold transition-all ${selectedAmount || customAmount
-                                            ? 'bg-amber-700 text-white hover:bg-amber-800 shadow-lg'
-                                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                            }`}
-                                    >
-                                        {selectedAmount || customAmount
-                                            ? `Donate €${selectedAmount || customAmount}`
-                                            : 'Select an amount'}
-                                    </motion.button>
+                                        </motion.div>
+                                    ) : (
+                                        <EquipmentDonationForm />
+                                    )}
                                 </div>
 
                                 <div className="flex flex-col justify-center">
@@ -276,6 +309,33 @@ export default function JoinPage() {
                                         </svg>
                                         Download 2024 Annual Report
                                     </motion.a>
+
+                                    {/* Contact Buttons */}
+                                    <div className="flex gap-3 mt-6">
+                                        <motion.a
+                                            href="https://wa.me/351912345678"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="flex-1 flex items-center justify-center gap-2 p-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors cursor-pointer shadow-md"
+                                        >
+                                            <MessageCircle className="w-5 h-5" />
+                                            <span className="font-semibold text-sm">WhatsApp</span>
+                                        </motion.a>
+
+                                        <motion.a
+                                            href="https://instagram.com/surffarm"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="flex-1 flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-colors cursor-pointer shadow-md"
+                                        >
+                                            <Instagram className="w-5 h-5" />
+                                            <span className="font-semibold text-sm">Instagram</span>
+                                        </motion.a>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
@@ -444,7 +504,7 @@ function VolunteerBenefits() {
 function VolunteerForm() {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
-        name: '', email: '', phone: '', availability: '', interests: [] as string[], experience: ''
+        name: '', email: '', phone: '', availability: '', interests: [] as string[], experience: '', consent: false
     });
 
     const totalSteps = 3;
@@ -520,6 +580,19 @@ function VolunteerForm() {
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
                         <input type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full p-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800" placeholder="+351 123 456 789" />
                     </div>
+                    <div className="pt-2">
+                        <label className="flex items-start gap-3 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={formData.consent}
+                                onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+                                className="mt-1 w-4 h-4 rounded border-gray-300 text-amber-700 focus:ring-amber-600"
+                            />
+                            <span className="text-sm text-gray-600">
+                                I agree to the <a href="#" className="text-amber-700 hover:underline">Privacy Policy</a> and consent to having my data processed for volunteering purposes.
+                            </span>
+                        </label>
+                    </div>
                 </motion.div>
             )}
 
@@ -527,7 +600,16 @@ function VolunteerForm() {
                 {step > 1 && (
                     <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => setStep(step - 1)} className="flex-1 py-3 rounded-xl bg-gray-300 text-gray-700 font-semibold hover:bg-gray-400 transition-colors">Previous</motion.button>
                 )}
-                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => step === totalSteps ? console.log('Submit', formData) : setStep(step + 1)} className="flex-1 py-3 rounded-xl bg-amber-700 text-white font-semibold hover:bg-amber-800 transition-colors">
+                <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => step === totalSteps ? console.log('Submit', formData) : setStep(step + 1)}
+                    disabled={step === totalSteps && !formData.consent}
+                    className={`flex-1 py-3 rounded-xl font-semibold transition-colors ${step === totalSteps && !formData.consent
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : 'bg-amber-700 text-white hover:bg-amber-800'
+                        }`}
+                >
                     {step === totalSteps ? 'Submit Application' : 'Next'}
                 </motion.button>
             </div>
@@ -538,7 +620,7 @@ function VolunteerForm() {
 function PartnershipForm() {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
-        organizationName: '', contactName: '', email: '', phone: '', partnershipType: '', message: ''
+        organizationName: '', contactName: '', email: '', phone: '', partnershipType: '', message: '', consent: false
     });
 
     const totalSteps = 3;
@@ -596,6 +678,19 @@ function PartnershipForm() {
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Message</label>
                         <textarea value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="w-full p-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800 resize-none" rows={4} placeholder="Tell us about your partnership idea..." />
                     </div>
+                    <div className="pt-2">
+                        <label className="flex items-start gap-3 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={formData.consent}
+                                onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+                                className="mt-1 w-4 h-4 rounded border-gray-300 text-amber-700 focus:ring-amber-600"
+                            />
+                            <span className="text-sm text-gray-600">
+                                I agree to the <a href="#" className="text-amber-700 hover:underline">Privacy Policy</a> and consent to having my data processed for partnership inquiries.
+                            </span>
+                        </label>
+                    </div>
                 </motion.div>
             )}
 
@@ -603,10 +698,133 @@ function PartnershipForm() {
                 {step > 1 && (
                     <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => setStep(step - 1)} className="flex-1 py-3 rounded-xl bg-gray-300 text-gray-700 font-semibold hover:bg-gray-400 transition-colors">Previous</motion.button>
                 )}
-                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => step === totalSteps ? console.log('Submit', formData) : setStep(step + 1)} className="flex-1 py-3 rounded-xl bg-amber-700 text-white font-semibold hover:bg-amber-800 transition-colors">
+                <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => step === totalSteps ? console.log('Submit', formData) : setStep(step + 1)}
+                    disabled={step === totalSteps && !formData.consent}
+                    className={`flex-1 py-3 rounded-xl font-semibold transition-colors ${step === totalSteps && !formData.consent
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : 'bg-amber-700 text-white hover:bg-amber-800'
+                        }`}
+                >
                     {step === totalSteps ? 'Submit' : 'Next'}
                 </motion.button>
             </div>
         </div>
+    );
+}
+
+function EquipmentDonationForm() {
+    const [formData, setFormData] = useState({
+        type: '', condition: '', description: '', name: '', email: '', phone: '', consent: false
+    });
+
+    const handleSubmit = () => {
+        console.log('Equipment Donation:', formData);
+        // Handle submission
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-4"
+        >
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Equipment Type</label>
+                    <select
+                        value={formData.type}
+                        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                        className="w-full p-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800 text-sm"
+                    >
+                        <option value="">Select...</option>
+                        <option value="surfboard">Surfboard</option>
+                        <option value="wetsuit">Wetsuit</option>
+                        <option value="bodyboard">Bodyboard</option>
+                        <option value="fins">Fins/Leash</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Condition</label>
+                    <select
+                        value={formData.condition}
+                        onChange={(e) => setFormData({ ...formData, condition: e.target.value })}
+                        className="w-full p-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800 text-sm"
+                    >
+                        <option value="">Select...</option>
+                        <option value="new">Like New</option>
+                        <option value="good">Good</option>
+                        <option value="fair">Fair</option>
+                        <option value="repair">Needs Repair</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    className="w-full p-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800 resize-none text-sm"
+                    rows={3}
+                    placeholder="Brand, size, details..."
+                />
+            </div>
+
+            <div className="space-y-3">
+                <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full p-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800 text-sm"
+                    placeholder="Your Name"
+                />
+                <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full p-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800 text-sm"
+                    placeholder="Email"
+                />
+                <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full p-3 rounded-xl bg-white/70 border-2 border-transparent focus:border-amber-600 focus:outline-none text-gray-800 text-sm"
+                    placeholder="Phone (Optional)"
+                />
+            </div>
+
+            <div className="pt-1">
+                <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                        type="checkbox"
+                        checked={formData.consent}
+                        onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+                        className="mt-1 w-4 h-4 rounded border-gray-300 text-amber-700 focus:ring-amber-600"
+                    />
+                    <span className="text-xs text-gray-600">
+                        I agree to the <a href="#" className="text-amber-700 hover:underline">Privacy Policy</a>.
+                    </span>
+                </label>
+            </div>
+
+            <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleSubmit}
+                disabled={!formData.consent || !formData.type}
+                className={`w-full py-3 rounded-xl font-bold transition-all ${formData.consent && formData.type
+                    ? 'bg-amber-700 text-white hover:bg-amber-800 shadow-lg'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    }`}
+            >
+                Submit Equipment Donation
+            </motion.button>
+        </motion.div>
     );
 }

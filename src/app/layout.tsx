@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "Grounded out the blue",
 };
 
+import Footer from '@/components/Footer';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,6 +30,7 @@ export default function RootLayout({
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
         {children}
+        <Footer />
       </body>
     </html>
   );

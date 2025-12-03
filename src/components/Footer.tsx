@@ -23,7 +23,7 @@ const Footer = () => {
                     transition={{ duration: 0.5 }}
                     className="text-gray-600 font-medium"
                 >
-                    © {new Date().getFullYear()} Robin Theiss - Allan Deschamps - Surf Farm. All rights reserved.
+                    © {new Date().getFullYear()} Allan Deschamps. All rights reserved.
                 </motion.div>
 
                 {/* Social Icons */}
