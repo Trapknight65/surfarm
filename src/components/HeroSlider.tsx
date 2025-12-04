@@ -110,8 +110,8 @@ const HeroSlider = () => {
                     transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
                     className={`absolute inset-0 flex items-center justify-center ${slides[currentSlide].bgColor}`}
                 >
-                    <div className="relative z-10 text-center px-6 max-w-5xl">
-                        {/* Shimmering Icon */}
+                    <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl">
+                        {/* Shimmering Icon - Responsive sizing */}
                         <motion.div
                             animate={{
                                 y: [0, -20, 0],
@@ -121,40 +121,40 @@ const HeroSlider = () => {
                                 repeat: Infinity,
                                 ease: 'easeInOut',
                             }}
-                            className="mb-8 flex justify-center"
+                            className="mb-6 md:mb-8 flex justify-center"
                         >
                             {(() => {
                                 const IconComponent = slides[currentSlide].icon;
                                 return (
                                     <IconComponent
-                                        size={180}
+                                        size={window.innerWidth < 640 ? 80 : window.innerWidth < 1024 ? 120 : 180}
                                         strokeWidth={0.8}
                                         style={{
                                             stroke: `url(#${slides[currentSlide].gradientId})`,
                                             filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.4))'
                                         }}
-                                        className="filter drop-shadow-xl"
+                                        className="filter drop-shadow-xl w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-44 lg:h-44"
                                     />
                                 );
                             })()}
                         </motion.div>
 
-                        {/* Title */}
+                        {/* Title - Responsive typography */}
                         <motion.h1
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.2, duration: 0.8 }}
-                            className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-6 text-shadow leading-tight"
+                            className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-bold text-gray-900 mb-4 md:mb-6 text-shadow leading-tight"
                         >
                             {slides[currentSlide].title}
                         </motion.h1>
 
-                        {/* Subtitle */}
+                        {/* Subtitle - Responsive typography */}
                         <motion.p
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.4, duration: 0.8 }}
-                            className="text-xl md:text-3xl lg:text-4xl text-gray-700 font-light tracking-wide"
+                            className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-gray-700 font-light tracking-wide"
                         >
                             {slides[currentSlide].subtitle}
                         </motion.p>
@@ -172,35 +172,36 @@ const HeroSlider = () => {
                             }}
                             className="absolute inset-0 -z-10"
                         >
-                            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-white/30 rounded-full blur-3xl" />
-                            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/20 rounded-full blur-3xl" />
+                            <div className="absolute top-1/4 left-1/4 w-32 h-32 md:w-64 md:h-64 bg-white/30 rounded-full blur-3xl" />
+                            <div className="absolute bottom-1/4 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-white/20 rounded-full blur-3xl" />
                         </motion.div>
                     </div>
                 </motion.div>
             </AnimatePresence>
 
-            {/* Navigation Arrow */}
+            {/* Navigation Arrow - Responsive sizing */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1, duration: 1 }}
-                className="absolute bottom-12 left-1/2 -translate-x-1/2 cursor-pointer z-50"
+                className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 cursor-pointer z-50"
                 onClick={handleScrollToMission}
             >
                 <motion.div
                     animate={{ y: [0, 10, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
-                    className="text-gray-900 bg-white/30 p-4 rounded-full backdrop-blur-md hover:bg-white/50 transition-colors"
+                    className="text-gray-900 bg-white/30 p-3 md:p-4 rounded-full backdrop-blur-md hover:bg-white/50 transition-colors touch-target"
                 >
                     <svg
-                        width="24"
-                        height="24"
+                        width="20"
+                        height="20"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="md:w-6 md:h-6"
                     >
                         <path d="M12 5v14M19 12l-7 7-7-7" />
                     </svg>

@@ -6,9 +6,12 @@
 
 import Header from '@/components/Header';
 import PageNavigation from '@/components/PageNavigation';
-import { Leaf, HeartHandshake, Instagram, MessageCircle, Calendar, User, Wind, Waves as WavesIcon, Droplets, Eye } from 'lucide-react';
+import { Leaf, HeartHandshake, Instagram, MessageCircle, Calendar, User, Wind, Waves as WavesIcon, Droplets, Eye, Users, Globe, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import ProgramCard from './components/ProgramCard';
+import SocialImpactStats from './components/SocialImpactStats';
+import GroupSessionBooking from './components/GroupSessionBooking';
 
 const instructors = [
     { name: 'João Silva', specialty: 'Beginner Lessons', available: true },
@@ -40,6 +43,7 @@ export default function SurfPage() {
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [sessionNotes, setSessionNotes] = useState('');
     const [consent, setConsent] = useState(false);
+    const [selectedProgram, setSelectedProgram] = useState<'kids' | 'refugees' | 'women' | null>(null);
 
     // Generate calendar days
     const calendarDays = Array.from({ length: 14 }, (_, i) => {
@@ -64,6 +68,92 @@ export default function SurfPage() {
 
             <div className="pt-32 px-6 pb-20 max-w-[1800px] mx-auto">
                 <h1 className="text-4xl md:text-6xl font-bold mb-8 text-gray-900">Surf Dashboard</h1>
+
+                {/* Social Surf Hero Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-12 text-center"
+                >
+                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-2 rounded-full mb-4">
+                        <Heart className="w-5 h-5" />
+                        <span className="font-semibold">Surf for All</span>
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+                        Building Community Through Waves
+                    </h2>
+                    <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto">
+                        Our social surf programs bring the joy and healing power of surfing to underserved communities.
+                        Join us in making waves of positive change.
+                    </p>
+                </motion.div>
+
+                {/* Social Impact Statistics */}
+                <div className="mb-12">
+                    <SocialImpactStats />
+                </div>
+
+                {/* Social Programs Section */}
+                <div className="mb-16">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
+                        Our Social Programs
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <ProgramCard
+                            icon={Users}
+                            title="Kids & Teens Surf Club"
+                            targetAudience="Ages 8-17, all skill levels welcome"
+                            duration="2-hour sessions, weekly programs available"
+                            benefits={[
+                                'Professional instruction & safety gear',
+                                'Skill development & confidence building',
+                                'Teamwork & ocean awareness',
+                                'Equipment provided'
+                            ]}
+                            color="bg-gradient-to-br from-orange-400 to-red-500"
+                            onBookClick={() => setSelectedProgram('kids')}
+                        />
+                        <ProgramCard
+                            icon={Globe}
+                            title="Refugees & Newcomers"
+                            targetAudience="All ages, multilingual support available"
+                            duration="Free 2-hour sessions, flexible scheduling"
+                            benefits={[
+                                'Completely FREE program',
+                                'Community integration & healing',
+                                'Multilingual instructors',
+                                'All equipment provided'
+                            ]}
+                            color="bg-gradient-to-br from-green-400 to-emerald-500"
+                            onBookClick={() => setSelectedProgram('refugees')}
+                        />
+                        <ProgramCard
+                            icon={Heart}
+                            title="Women's Empowerment"
+                            targetAudience="Women-only environment, all levels"
+                            duration="2-hour sessions, supportive community"
+                            benefits={[
+                                'Female instructors only',
+                                'Confidence & strength building',
+                                'Supportive sisterhood',
+                                'Safe, inclusive space'
+                            ]}
+                            color="bg-gradient-to-br from-pink-400 to-purple-500"
+                            onBookClick={() => setSelectedProgram('women')}
+                        />
+                    </div>
+                </div>
+
+                {/* Group Booking Modal */}
+                <GroupSessionBooking
+                    selectedProgram={selectedProgram}
+                    onClose={() => setSelectedProgram(null)}
+                />
+
+                {/* Divider */}
+                <div className="border-t-2 border-gray-200 my-12"></div>
+
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">Individual Booking</h2>
 
                 {/* Dashboard Grid */}
                 <div className="grid grid-cols-12 gap-6">
