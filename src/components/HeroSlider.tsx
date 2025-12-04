@@ -111,7 +111,7 @@ const HeroSlider = () => {
                     className={`absolute inset-0 flex items-center justify-center ${slides[currentSlide].bgColor}`}
                 >
                     <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl">
-                        {/* Shimmering Icon - Responsive sizing */}
+                        {/* Shimmering Icon - Responsive sizing with CSS */}
                         <motion.div
                             animate={{
                                 y: [0, -20, 0],
@@ -127,13 +127,15 @@ const HeroSlider = () => {
                                 const IconComponent = slides[currentSlide].icon;
                                 return (
                                     <IconComponent
-                                        size={window.innerWidth < 640 ? 80 : window.innerWidth < 1024 ? 120 : 180}
+                                        size={120}
                                         strokeWidth={0.8}
                                         style={{
                                             stroke: `url(#${slides[currentSlide].gradientId})`,
-                                            filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.4))'
+                                            filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.4))',
+                                            width: 'clamp(80px, 15vw, 180px)',
+                                            height: 'clamp(80px, 15vw, 180px)'
                                         }}
-                                        className="filter drop-shadow-xl w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-44 lg:h-44"
+                                        className="filter drop-shadow-xl"
                                     />
                                 );
                             })()}
