@@ -51,7 +51,7 @@ export default function JoinPage() {
     };
 
     const navigationCards = [
-        { title: 'Our Mission', href: '/', icon: Leaf },
+        { title: 'Our Mission', href: '/mission', icon: Leaf },
         { title: 'Surf', href: '/surf', icon: Waves }
     ];
 
@@ -139,7 +139,6 @@ export default function JoinPage() {
             <div className="lg:hidden fixed right-4 top-1/2 -translate-y-1/2 z-30">
                 <div className="glass rounded-2xl p-2 space-y-2">
                     {[
-                        { id: 'events', icon: Calendar, label: 'Events' },
                         { id: 'volunteer', icon: Leaf, label: 'Volunteer' },
                         { id: 'donate', icon: Heart, label: 'Donate' },
                         { id: 'partner', icon: Waves, label: 'Partner' }

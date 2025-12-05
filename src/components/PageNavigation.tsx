@@ -29,7 +29,7 @@ const PageNavigation = ({ cards }: PageNavigationProps) => {
     return (
         <>
             {/* Mobile: Expandable Menu with Compass Button */}
-            <div className="md:hidden fixed bottom-1/4 -translate-y-1/2 right-4 z-40">
+            <div className="md:hidden fixed bottom-32 -translate-y-1/2 right-4 z-40">
                 {/* Toggle Button */}
                 <motion.button
                     onClick={toggleMenu}
