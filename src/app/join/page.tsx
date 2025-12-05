@@ -4,29 +4,41 @@
  */
 'use client';
 
-import Header from '@/components/Header';
+import Header, { WeatherWidget } from '@/components/Header';
 import PageNavigation from '@/components/PageNavigation';
-import { Leaf, Waves, Heart, MessageCircle, Instagram, ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
+import { Leaf, Waves, Heart, MessageCircle, Instagram, ArrowLeft, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
 
 // Import local components
+import EventsSection, { events } from './components/EventsSection';
+import MobileEventsWidget from './components/MobileEventsWidget';
+import DesktopEventsWidget from './components/DesktopEventsWidget';
+import MobileEventsListModal from './components/MobileEventsListModal';
+import { Event } from './components/EventCard';
+import EventModal from './components/EventModal';
 import DonationCounter from './components/DonationCounter';
 import PartnerLogoCarousel from './components/PartnerLogoCarousel';
 import VolunteerBenefits from './components/VolunteerBenefits';
 import VolunteerForm from './components/VolunteerForm';
 import PartnershipForm from './components/PartnershipForm';
 import EquipmentDonationForm from './components/EquipmentDonationForm';
+import ProjectsWidget from '../mission/components/ProjectsWidget';
+import ProjectsModal from '../mission/components/ProjectsModal';
+import { projects } from '../mission/components/ProjectsSection';
 
 const donationAmounts = [1, 5, 10, 25, 50, 100];
 
 export default function JoinPage() {
     const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
     const [customAmount, setCustomAmount] = useState('');
-    const [activeSection, setActiveSection] = useState('volunteer');
+    const [activeSection, setActiveSection] = useState('events');
     const [donationType, setDonationType] = useState<'money' | 'equipment'>('money');
     const [showPartnershipForm, setShowPartnershipForm] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+    const [showEventsList, setShowEventsList] = useState(false);
+    const [showProjects, setShowProjects] = useState(false);
 
     const handleAmountSelect = (amount: number) => {
         setSelectedAmount(amount);
@@ -51,15 +63,56 @@ export default function JoinPage() {
         }
     };
 
+    const handleEventSelect = (event: Event) => {
+        setSelectedEvent(event);
+        setShowEventsList(false);
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-amber-50">
-            <Header />
+            <Header
+                customMobileWidget={
+                    <MobileEventsWidget
+                        events={events}
+                        onClick={() => setShowEventsList(true)}
+                    />
+                }
+                customDesktopWidget={<></>}
+                customRightWidget={({ openForecastModal }) => (
+                    <div className="flex items-center gap-4">
+                        <DesktopEventsWidget
+                            events={events}
+                            onClick={() => setShowEventsList(true)}
+                        />
+                        <ProjectsWidget
+                            projects={projects}
+                            onClick={() => setShowProjects(true)}
+                        />
+                        <WeatherWidget onClick={openForecastModal} />
+                    </div>
+                )}
+            />
+            <ProjectsModal
+                isOpen={showProjects}
+                onClose={() => setShowProjects(false)}
+            />
+            <MobileEventsListModal
+                isOpen={showEventsList}
+                onClose={() => setShowEventsList(false)}
+                events={events}
+                onEventSelect={handleEventSelect}
+            />
+            <EventModal
+                event={selectedEvent}
+                onClose={() => setSelectedEvent(null)}
+            />
             <PageNavigation cards={navigationCards} />
 
             {/* Desktop Quick Navigation Sidebar - With Labels */}
             <div className="hidden lg:block fixed right-6 top-1/2 -translate-y-1/2 z-30">
                 <div className="glass rounded-2xl p-3 space-y-2">
                     {[
+                        { id: 'events', icon: Calendar, label: 'Events' },
                         { id: 'volunteer', icon: Leaf, label: 'Volunteer' },
                         { id: 'donate', icon: Heart, label: 'Donate' },
                         { id: 'partner', icon: Waves, label: 'Partner' }
@@ -86,6 +139,7 @@ export default function JoinPage() {
             <div className="lg:hidden fixed right-4 top-1/2 -translate-y-1/2 z-30">
                 <div className="glass rounded-2xl p-2 space-y-2">
                     {[
+                        { id: 'events', icon: Calendar, label: 'Events' },
                         { id: 'volunteer', icon: Leaf, label: 'Volunteer' },
                         { id: 'donate', icon: Heart, label: 'Donate' },
                         { id: 'partner', icon: Waves, label: 'Partner' }
@@ -107,32 +161,6 @@ export default function JoinPage() {
                 </div>
             </div>
 
-            {/* Back Navigation */}
-            <div className="fixed top-20 md:top-24 left-4 md:left-6 z-30">
-                <div className="flex flex-col gap-2">
-                    <Link href="/">
-                        <motion.button
-                            whileHover={{ scale: 1.05, x: -2 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="glass px-3 md:px-4 py-2 md:py-2.5 rounded-xl flex items-center gap-2 hover:bg-white/70 transition-colors text-sm md:text-base"
-                        >
-                            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
-                            <span className="font-semibold text-gray-700">Mission</span>
-                        </motion.button>
-                    </Link>
-                    <Link href="/surf">
-                        <motion.button
-                            whileHover={{ scale: 1.05, x: -2 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="glass px-3 md:px-4 py-2 md:py-2.5 rounded-xl flex items-center gap-2 hover:bg-white/70 transition-colors text-sm md:text-base"
-                        >
-                            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
-                            <span className="font-semibold text-gray-700">Surf</span>
-                        </motion.button>
-                    </Link>
-                </div>
-            </div>
-
             <main className="pt-20 md:pt-24 pb-12 md:pb-20 px-4 sm:px-6 md:px-8">
                 <div className="max-w-6xl mx-auto space-y-8 md:space-y-12">
                     {/* Page Header */}
@@ -149,6 +177,11 @@ export default function JoinPage() {
                             your contribution helps us create a sustainable future.
                         </p>
                     </motion.div>
+
+                    {/* Events Section - Hidden on Mobile */}
+                    <div className="hidden lg:block">
+                        <EventsSection />
+                    </div>
 
                     {/* Volunteer Section */}
                     <motion.div

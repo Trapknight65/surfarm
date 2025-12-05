@@ -7,11 +7,56 @@
 import Header from '@/components/Header';
 import PageNavigation from '@/components/PageNavigation';
 import { Waves, HeartHandshake } from 'lucide-react';
+import ProjectsSection, { projects } from './components/ProjectsSection';
+import DesktopEventsWidget from '../join/components/DesktopEventsWidget';
+import ProjectsWidget from './components/ProjectsWidget';
+import ProjectsModal from './components/ProjectsModal';
+import { events } from '../join/components/EventsSection';
+import { WeatherWidget } from '@/components/Header';
+import MobileEventsWidget from '../join/components/MobileEventsWidget';
+import MobileProjectsWidget from './components/MobileProjectsWidget';
+import MobileEventsListModal from '../join/components/MobileEventsListModal';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function MissionPage() {
+    const router = useRouter();
+    const [showProjects, setShowProjects] = useState(false);
+    const [showEventsList, setShowEventsList] = useState(false);
+
     return (
         <main className="min-h-screen bg-green-50">
-            <Header />
+            <Header
+                customMobileWidget={
+                    <MobileProjectsWidget
+                        projects={projects}
+                        onClick={() => setShowProjects(true)}
+                    />
+                }
+                customRightWidget={({ openForecastModal }) => (
+                    <div className="flex items-center gap-4">
+                        <DesktopEventsWidget
+                            events={events}
+                            onClick={() => setShowEventsList(true)}
+                        />
+                        <ProjectsWidget
+                            projects={projects}
+                            onClick={() => setShowProjects(true)}
+                        />
+                        <WeatherWidget onClick={openForecastModal} />
+                    </div>
+                )}
+            />
+            <ProjectsModal
+                isOpen={showProjects}
+                onClose={() => setShowProjects(false)}
+            />
+            <MobileEventsListModal
+                isOpen={showEventsList}
+                onClose={() => setShowEventsList(false)}
+                events={events}
+                onEventSelect={() => { }}
+            />
             <PageNavigation
                 cards={[
                     { title: 'Surf', href: '/surf', icon: Waves },
@@ -52,6 +97,9 @@ export default function MissionPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* Projects Section */}
+                <ProjectsSection />
             </div>
         </main>
     );

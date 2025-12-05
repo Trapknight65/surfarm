@@ -5,11 +5,11 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Globe, Heart, Calendar, X } from 'lucide-react';
+import { Users, Globe, Heart, UserPlus, Calendar, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface GroupSessionBookingProps {
-    selectedProgram: 'kids' | 'refugees' | 'women' | null;
+    selectedProgram: 'kids' | 'refugees' | 'women' | 'standard' | null;
     onClose: () => void;
 }
 
@@ -29,19 +29,29 @@ const GroupSessionBooking = ({ selectedProgram, onClose }: GroupSessionBookingPr
             title: 'Kids & Teens Surf Club',
             icon: Users,
             color: 'from-orange-400 to-red-500',
-            pricePerPerson: 15
+            pricePerPerson: 0,
+            note: 'FREE Social Program'
         },
         refugees: {
             title: 'Refugees & Newcomers Program',
             icon: Globe,
             color: 'from-green-400 to-emerald-500',
-            pricePerPerson: 0 // Free program
+            pricePerPerson: 0,
+            note: 'FREE Social Program'
         },
         women: {
             title: "Women's Empowerment Sessions",
             icon: Heart,
             color: 'from-pink-400 to-purple-500',
-            pricePerPerson: 20
+            pricePerPerson: 0,
+            note: 'FREE Social Program'
+        },
+        standard: {
+            title: 'Standard Group Session',
+            icon: UserPlus,
+            color: 'from-blue-400 to-cyan-500',
+            pricePerPerson: 25,
+            note: 'Group discounts available for 10+ participants'
         }
     };
 
@@ -228,6 +238,13 @@ const GroupSessionBooking = ({ selectedProgram, onClose }: GroupSessionBookingPr
 
                         {/* Pricing Summary */}
                         <div className="bg-cyan-50 p-4 rounded-xl">
+                            {program.note && (
+                                <div className="mb-3 p-2 bg-white rounded-lg">
+                                    <p className="text-sm font-semibold text-cyan-700 text-center">
+                                        ℹ️ {program.note}
+                                    </p>
+                                </div>
+                            )}
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-gray-700">Group Size:</span>
                                 <span className="font-semibold">{groupSize} participants</span>
@@ -270,8 +287,8 @@ const GroupSessionBooking = ({ selectedProgram, onClose }: GroupSessionBookingPr
                             whileTap={{ scale: 0.98 }}
                             disabled={!consent}
                             className={`w-full py-4 rounded-xl font-bold text-white shadow-lg transition-all ${consent
-                                    ? `bg-gradient-to-r ${program.color} hover:opacity-90`
-                                    : 'bg-gray-300 cursor-not-allowed'
+                                ? `bg-gradient-to-r ${program.color} hover:opacity-90`
+                                : 'bg-gray-300 cursor-not-allowed'
                                 }`}
                         >
                             Request Group Booking

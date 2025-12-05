@@ -6,12 +6,19 @@
 
 import Header from '@/components/Header';
 import PageNavigation from '@/components/PageNavigation';
-import { Leaf, HeartHandshake, Instagram, MessageCircle, Calendar, User, Wind, Waves as WavesIcon, Droplets, Eye, Users, Globe, Heart } from 'lucide-react';
+import { Leaf, HeartHandshake, Instagram, MessageCircle, Calendar, User, Wind, Waves as WavesIcon, Droplets, Eye, Users, Globe, Heart, UserPlus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import ProgramCard from './components/ProgramCard';
+import FlippableProgramCard from './components/FlippableProgramCard';
 import SocialImpactStats from './components/SocialImpactStats';
-import GroupSessionBooking from './components/GroupSessionBooking';
+import DesktopEventsWidget from '../join/components/DesktopEventsWidget';
+import ProjectsWidget from '../mission/components/ProjectsWidget';
+import ProjectsModal from '../mission/components/ProjectsModal';
+import { projects } from '../mission/components/ProjectsSection';
+import { events } from '../join/components/EventsSection';
+import { WeatherWidget } from '@/components/Header';
+import MobileEventsListModal from '../join/components/MobileEventsListModal';
+import { useRouter } from 'next/navigation';
 
 const instructors = [
     { name: 'João Silva', specialty: 'Beginner Lessons', available: true },
@@ -39,11 +46,13 @@ const forecastData = {
 };
 
 export default function SurfPage() {
+    const router = useRouter();
     const [selectedDate, setSelectedDate] = useState<number | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [sessionNotes, setSessionNotes] = useState('');
     const [consent, setConsent] = useState(false);
-    const [selectedProgram, setSelectedProgram] = useState<'kids' | 'refugees' | 'women' | null>(null);
+    const [showProjects, setShowProjects] = useState(false);
+    const [showEventsList, setShowEventsList] = useState(false);
 
     // Generate calendar days
     const calendarDays = Array.from({ length: 14 }, (_, i) => {
@@ -58,13 +67,64 @@ export default function SurfPage() {
 
     return (
         <main className="min-h-screen bg-cyan-50">
-            <Header />
+            <Header
+                customRightWidget={({ openForecastModal }) => (
+                    <div className="flex items-center gap-4">
+                        <DesktopEventsWidget
+                            events={events}
+                            onClick={() => setShowEventsList(true)}
+                        />
+                        <ProjectsWidget
+                            projects={projects}
+                            onClick={() => setShowProjects(true)}
+                        />
+                        <WeatherWidget onClick={openForecastModal} />
+                    </div>
+                )}
+            />
+            <ProjectsModal
+                isOpen={showProjects}
+                onClose={() => setShowProjects(false)}
+            />
+            <MobileEventsListModal
+                isOpen={showEventsList}
+                onClose={() => setShowEventsList(false)}
+                events={events}
+                onEventSelect={() => { }}
+            />
             <PageNavigation
                 cards={[
                     { title: 'Our Mission', href: '/mission', icon: Leaf },
                     { title: 'Join Us', href: '/join', icon: HeartHandshake }
                 ]}
             />
+
+            {/* Fixed Social Buttons */}
+            <div className="fixed right-6 top-24 z-40 flex flex-col gap-3">
+                <motion.a
+                    href="https://wa.me/351912345678"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-lg flex items-center justify-center transition-colors"
+                    aria-label="WhatsApp"
+                >
+                    <MessageCircle className="w-6 h-6" />
+                </motion.a>
+
+                <motion.a
+                    href="https://instagram.com/surffarm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl shadow-lg flex items-center justify-center transition-colors"
+                    aria-label="Instagram"
+                >
+                    <Instagram className="w-6 h-6" />
+                </motion.a>
+            </div>
 
             <div className="pt-32 px-6 pb-20 max-w-[1800px] mx-auto">
                 <h1 className="text-4xl md:text-6xl font-bold mb-8 text-gray-900">Surf Dashboard</h1>
@@ -96,14 +156,14 @@ export default function SurfPage() {
                 {/* Social Programs Section */}
                 <div className="mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-                        Our Social Programs
+                        Group Session Programs
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <ProgramCard
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                        <FlippableProgramCard
                             icon={Users}
                             title="Kids & Teens Surf Club"
                             targetAudience="Ages 8-17, all skill levels welcome"
-                            duration="2-hour sessions, weekly programs available"
+                            duration="FREE 2-hour sessions, weekly programs available"
                             benefits={[
                                 'Professional instruction & safety gear',
                                 'Skill development & confidence building',
@@ -111,13 +171,15 @@ export default function SurfPage() {
                                 'Equipment provided'
                             ]}
                             color="bg-gradient-to-br from-orange-400 to-red-500"
-                            onBookClick={() => setSelectedProgram('kids')}
+                            pricePerPerson={0}
+                            note="FREE Social Program"
+                            programId="kids"
                         />
-                        <ProgramCard
+                        <FlippableProgramCard
                             icon={Globe}
                             title="Refugees & Newcomers"
                             targetAudience="All ages, multilingual support available"
-                            duration="Free 2-hour sessions, flexible scheduling"
+                            duration="FREE 2-hour sessions, flexible scheduling"
                             benefits={[
                                 'Completely FREE program',
                                 'Community integration & healing',
@@ -125,13 +187,15 @@ export default function SurfPage() {
                                 'All equipment provided'
                             ]}
                             color="bg-gradient-to-br from-green-400 to-emerald-500"
-                            onBookClick={() => setSelectedProgram('refugees')}
+                            pricePerPerson={0}
+                            note="FREE Social Program"
+                            programId="refugees"
                         />
-                        <ProgramCard
+                        <FlippableProgramCard
                             icon={Heart}
                             title="Women's Empowerment"
                             targetAudience="Women-only environment, all levels"
-                            duration="2-hour sessions, supportive community"
+                            duration="FREE 2-hour sessions, supportive community"
                             benefits={[
                                 'Female instructors only',
                                 'Confidence & strength building',
@@ -139,16 +203,28 @@ export default function SurfPage() {
                                 'Safe, inclusive space'
                             ]}
                             color="bg-gradient-to-br from-pink-400 to-purple-500"
-                            onBookClick={() => setSelectedProgram('women')}
+                            pricePerPerson={0}
+                            note="FREE Social Program"
+                            programId="women"
+                        />
+                        <FlippableProgramCard
+                            icon={UserPlus}
+                            title="Standard Group Session"
+                            targetAudience="Groups of 5-15 people, all ages and levels"
+                            duration="2-hour sessions, flexible scheduling"
+                            benefits={[
+                                'Professional surf instruction',
+                                'All equipment provided',
+                                'Group discounts available',
+                                'Perfect for teams & friends'
+                            ]}
+                            color="bg-gradient-to-br from-blue-400 to-cyan-500"
+                            pricePerPerson={25}
+                            note="Group discounts for 10+ participants"
+                            programId="standard"
                         />
                     </div>
                 </div>
-
-                {/* Group Booking Modal */}
-                <GroupSessionBooking
-                    selectedProgram={selectedProgram}
-                    onClose={() => setSelectedProgram(null)}
-                />
 
                 {/* Divider */}
                 <div className="border-t-2 border-gray-200 my-12"></div>
@@ -205,42 +281,6 @@ export default function SurfPage() {
                                         <p className="text-sm font-bold text-cyan-600">{forecastData.rating}</p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        {/* Quick Contact */}
-                        <div className="glass p-6 rounded-3xl">
-                            <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Contact</h3>
-                            <div className="space-y-3">
-                                <motion.a
-                                    href="https://wa.me/351912345678"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="flex items-center gap-3 p-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors cursor-pointer"
-                                >
-                                    <MessageCircle className="w-5 h-5" />
-                                    <div>
-                                        <div className="font-bold text-sm">WhatsApp</div>
-                                        <div className="text-xs opacity-90">Chat with us</div>
-                                    </div>
-                                </motion.a>
-
-                                <motion.a
-                                    href="https://instagram.com/surffarm"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-colors cursor-pointer"
-                                >
-                                    <Instagram className="w-5 h-5" />
-                                    <div>
-                                        <div className="font-bold text-sm">Instagram</div>
-                                        <div className="text-xs opacity-90">Follow us</div>
-                                    </div>
-                                </motion.a>
                             </div>
                         </div>
                     </div>
